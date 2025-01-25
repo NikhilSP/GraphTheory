@@ -1,3 +1,5 @@
+using GraphAndAlgorithms.Model;
+
 namespace GraphAndAlgorithms;
 
 public abstract class GraphBase
@@ -12,15 +14,15 @@ public abstract class GraphBase
 
     protected bool Directed { get; }
 
-    public abstract void AddEdge(int v1, int v2, int weight=1);
+    public abstract void AddEdge(Node node1,Node node2, int weight=1);
 
-    public abstract IEnumerable<int> GetAdjacentVertices(int v);
+    public abstract IEnumerable<int> GetAdjacentVertices(Node node);
 
-    public abstract int GetEdgeWeight(int v1, int v2);
+    public abstract int GetEdgeWeight(Node node1, Node node2);
 
-    public abstract void RemoveEdge(int v1, int v2);
+    public abstract void RemoveEdge(Node node1, Node node2);
     
-    public abstract void RemoveAllEdges(int v);
+    public abstract void RemoveAllEdges(Node node);
     
     public abstract void Clear();
 }

@@ -1,3 +1,5 @@
+using GraphAndAlgorithms.Model;
+
 namespace GraphAndAlgorithms.Graph;
 
 public class AdjacencyMatrixGraph : GraphBase
@@ -21,82 +23,67 @@ public class AdjacencyMatrixGraph : GraphBase
         }
     }
 
-    public override void AddEdge(int v1, int v2, int weight = 1)
+    public override void AddEdge(Node node1,Node node2, int weight = 1)
     {
-        if (!IsValidNode(v1) || !IsValidNode(v2))
-        {
-            throw new Exception("Vertices out of range");
-        }
+        ThrowExceptionWhenInValid(node1);
+        ThrowExceptionWhenInValid(node2);
 
         if (weight < 1)
         {
             throw new Exception("Weight cannot be less than 1");
         }
 
-        _adjMatrix[v1, v2] = weight;
+        _adjMatrix[node1.Id, node2.Id] = weight;
 
         if (!Directed)
         {
-            _adjMatrix[v2, v1] = weight;
+            _adjMatrix[node2.Id,node1.Id] = weight;
         }
     }
 
-    public override IEnumerable<int> GetAdjacentVertices(int v)
+    public override IEnumerable<int> GetAdjacentVertices(Node node)
     {
-        if (!IsValidNode(v))
-        {
-            throw new Exception("Vertex out of range");
-        }
+        ThrowExceptionWhenInValid(node);
 
         return
             Enumerable.Range(0, NumVertices)
-                .Select(j => _adjMatrix[v, j])
+                .Select(j => _adjMatrix[node.Id, j])
                 .Where(x => x != 0);
     }
 
-    public override int GetEdgeWeight(int v1, int v2)
+    public override int GetEdgeWeight(Node node1, Node node2)
     {
-        if (IsValidNode(v1) && IsValidNode(v2))
-        {
-            return _adjMatrix[v1, v2];
-        }
-        throw new Exception("Vertices out of range");
+        ThrowExceptionWhenInValid(node1);
+        ThrowExceptionWhenInValid(node2);
+
+        return _adjMatrix[node1.Id, node2.Id];
     }
 
-    public override void RemoveEdge(int v1, int v2)
+    public override void RemoveEdge(Node node1, Node node2)
     {
-        if (IsValidNode(v1) && IsValidNode(v2))
-        {
-            _adjMatrix[v1, v2] = 0;
+        ThrowExceptionWhenInValid(node1);
+        ThrowExceptionWhenInValid(node2);
 
-            if (Directed)
-            {
-                _adjMatrix[v2, v1] = 0;
-            }
-        }
-        else
+        _adjMatrix[node1.Id, node2.Id] = 0;
+
+        if (!Directed)
         {
-            throw new Exception("Vertices out of range");
+            _adjMatrix[node2.Id, node1.Id] = 0;
         }
     }
 
-    public override void RemoveAllEdges(int v)
+    public override void RemoveAllEdges(Node node)
     {
-        if (IsValidNode(v))
-        {
-            for (int i = 0; i < NumVertices; i++)
-            {
-                _adjMatrix[v, i] = 0;
+        ThrowExceptionWhenInValid(node);
 
-                if (Directed)
-                {
-                    _adjMatrix[i, v] = 0;
-                }
-            }
-        }
-        else
+        for (int i = 0; i < NumVertices; i++)
         {
-            throw new Exception("Vertex out of range");
+            _adjMatrix[node.Id, i] = 0;
+
+            if (!Directed)
+            {
+                _adjMatrix[i, node.Id] = 0;
+            }
         }
     }
 
@@ -105,8 +92,11 @@ public class AdjacencyMatrixGraph : GraphBase
         GenerateEmptyMatrix(NumVertices);
     }
 
-    private bool IsValidNode(int v)
+    private void ThrowExceptionWhenInValid(Node node)
     {
-        return v > 0 && v < NumVertices;
+        if (node.Id < 0 || node.Id >= NumVertices)
+        {
+            throw new Exception("node out of range");
+        }
     }
 }
