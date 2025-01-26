@@ -13,12 +13,12 @@ public class AdjacencyListGraphBuilder
         return _graph;
     }
 
-    public void AddEdge(int sourceId,int targetId)
+    public void AddEdge(int sourceId,int targetId, double weight =1)
     {
         var source = BuildNode(sourceId);
         var target = BuildNode(targetId);
         
-        _graph.AddEdge(new Edge(source,target));
+        _graph.AddEdge(new Edge(source,target,weight));
     }
 
     private Node BuildNode(int id)

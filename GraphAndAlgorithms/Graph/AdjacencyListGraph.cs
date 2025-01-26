@@ -52,6 +52,8 @@ public class AdjacencyListGraph
 
         return [];
     }
+    
+    
 
     public Edge? GetEdge(Node node1, Node node2)
     {
@@ -61,6 +63,11 @@ public class AdjacencyListGraph
         }
         
         return null;
+    }
+    
+    public IReadOnlyList<Edge> GetEdges(Node node1)
+    {
+        return _edgesByNode.GetValueOrDefault(node1) ?? [];
     }
 
     public void RemoveEdge(Edge edge)

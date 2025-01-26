@@ -28,4 +28,9 @@ public class Node : IEquatable<Node>
     {
         return Id;
     }
+
+    public override string ToString()
+    {
+        return "Node : "+Id;
+    }
 }
