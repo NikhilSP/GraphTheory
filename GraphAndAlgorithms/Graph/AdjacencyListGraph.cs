@@ -8,6 +8,9 @@ public class AdjacencyListGraph
     private readonly Dictionary<Node, List<Edge>> _edgesByNode = new();
     private readonly HashSet<Edge> _edges = new();
 
+    public IEnumerable<Edge> Edges => _edges;
+    public IEnumerable<Node> Nodes => _edgesByNode.Keys;
+    
     public AdjacencyListGraph(bool directed = false)
     {
         _directed = directed;
@@ -62,9 +65,13 @@ public class AdjacencyListGraph
 
     public void RemoveEdge(Edge edge)
     {
-        if (_edgesByNode.ContainsKey(edge.Source))
+        if (_edgesByNode.TryGetValue(edge.Source, out var value))
         {
-            _edgesByNode[edge.Source].Remove(edge);
+            value.Remove(edge);
+        }
+        else
+        {
+            return;
         }
 
         if (!_directed)
@@ -77,15 +84,26 @@ public class AdjacencyListGraph
 
     public void RemoveAllEdges(Node node)
     {
-        if (_edgesByNode.ContainsKey(node))
+        if (_edgesByNode.TryGetValue(node, out var value))
         {
-            var edgesToBeRemoved = _edgesByNode[node].ToList();
+            var edgesToBeRemoved = value.ToList();
             
             foreach (var edge in  edgesToBeRemoved)
             {
                 RemoveEdge(edge);
             }
         }
+    }
+
+    public void PruneNodes()
+    {
+        var singlesNodes = _edgesByNode.Where(x => !x.Value.Any()).Select(x=>x.Key);
+
+        foreach (var singlesNode in singlesNodes)
+        {
+            _edgesByNode.Remove(singlesNode);
+        }
+        
     }
 
     public void Clear()
