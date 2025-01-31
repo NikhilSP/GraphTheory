@@ -10,6 +10,7 @@ public class AdjacencyListGraph
 
     public IEnumerable<Edge> Edges => _edges;
     public IEnumerable<Node> Nodes => _edgesByNode.Keys;
+    public IEnumerable<Node> LeafNodes => _edgesByNode.Where(x=>x.Value.Count==1).Keys;
     
     public AdjacencyListGraph(bool directed = false)
     {
@@ -52,8 +53,6 @@ public class AdjacencyListGraph
 
         return [];
     }
-    
-    
 
     public Edge? GetEdge(Node node1, Node node2)
     {
@@ -68,6 +67,24 @@ public class AdjacencyListGraph
     public IReadOnlyList<Edge> GetEdges(Node node1)
     {
         return _edgesByNode.GetValueOrDefault(node1) ?? [];
+    }
+
+    public void RemoveNodes(Node[] nodes)
+    {
+        foreach (var node in nodes)
+        {
+            RemoveNode(node);
+        }
+    }
+
+    public void RemoveNode(Node node)
+    {
+        foreach (var edge in GetEdges(node))
+        {
+            RemoveEdge(edge);
+        }
+
+        _edgesByNode.Remove(node);
     }
 
     public void RemoveEdge(Edge edge)
