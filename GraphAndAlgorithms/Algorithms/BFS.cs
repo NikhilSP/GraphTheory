@@ -1,3 +1,4 @@
+using System.Text;
 using GraphAndAlgorithms.Graph;
 using GraphAndAlgorithms.Model;
 
@@ -9,19 +10,17 @@ public class BFS
     private readonly HashSet<Node> _visited;
     private readonly Queue<Node> _queue;
     
-    public BFS(AdjacencyListGraph graph, Node startNode)
+    public BFS(AdjacencyListGraph graph)
     {
         _graph = graph;
         _visited = new HashSet<Node>();
         _queue = new Queue<Node>();
         Result = new List<int>();
-        
-        Traverse(startNode);
     }
     
     public  List<int> Result { get; }
 
-    private void Traverse(Node node)
+    public void Traverse(Node node)
     {
         Console.WriteLine($"Node {node.Id}");
         
@@ -42,4 +41,28 @@ public class BFS
             Traverse(_queue.Dequeue());
         }
     }
+    
+    public StringBuilder Encode(Node node,StringBuilder encoder)
+    {
+        encoder.Append(node.Id);
+        
+        Result.Add(node.Id);
+
+        if (_visited.Add(node))
+        {
+            var neighbors = _graph.GetAdjacentVertices(node);
+
+            foreach (var neighbor in neighbors)
+            {
+                _queue.Enqueue(neighbor);
+            }
+        }
+
+        if (_queue.Count > 0)
+        {
+            Encode(_queue.Dequeue(),encoder);
+        }
+
+        return encoder;
+    } 
 }

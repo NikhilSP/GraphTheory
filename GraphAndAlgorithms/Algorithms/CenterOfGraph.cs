@@ -10,7 +10,7 @@ public class CenterOfGraph
 
     public CenterOfGraph(AdjacencyListGraph graph)
     {
-        _graph = graph;
+        _graph = graph.Clone();
     }
 
     private Node[]? FindCenterNodes()

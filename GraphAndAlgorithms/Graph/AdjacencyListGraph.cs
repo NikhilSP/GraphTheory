@@ -10,7 +10,7 @@ public class AdjacencyListGraph
 
     public IEnumerable<Edge> Edges => _edges;
     public IEnumerable<Node> Nodes => _edgesByNode.Keys;
-    public IEnumerable<Node> LeafNodes => _edgesByNode.Where(x=>x.Value.Count==1).Keys;
+    public IEnumerable<Node> LeafNodes => _edgesByNode.Where(x=>x.Value.Count==1).Select(x=>x.Key);
     
     public AdjacencyListGraph(bool directed = false)
     {
@@ -58,7 +58,7 @@ public class AdjacencyListGraph
     {
         if (_edgesByNode.TryGetValue(node1, out var edges))
         {
-            return edges.First(x => x.Target == node2);
+            return edges.First(x => x.Target.Equals(node2));
         }
         
         return null;
@@ -73,19 +73,10 @@ public class AdjacencyListGraph
     {
         foreach (var node in nodes)
         {
-            RemoveNode(node);
+            RemoveAllEdges(node);
         }
     }
-
-    public void RemoveNode(Node node)
-    {
-        foreach (var edge in GetEdges(node))
-        {
-            RemoveEdge(edge);
-        }
-
-        _edgesByNode.Remove(node);
-    }
+    
 
     public void RemoveEdge(Edge edge)
     {
@@ -117,6 +108,8 @@ public class AdjacencyListGraph
                 RemoveEdge(edge);
             }
         }
+
+        PruneNodes();
     }
 
     public void PruneNodes()
@@ -134,5 +127,17 @@ public class AdjacencyListGraph
     {
         _edgesByNode.Clear();
         _edges.Clear();
+    }
+
+    public AdjacencyListGraph Clone()
+    {
+        var clone = new AdjacencyListGraph();
+
+        foreach (var edge in Edges)
+        {
+            clone.AddEdge(edge);
+        }
+
+        return clone;
     }
 }
