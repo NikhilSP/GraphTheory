@@ -30,7 +30,7 @@ public class BFS
         {
             var neighbors = _graph.GetAdjacentVertices(node);
 
-            foreach (var neighbor in neighbors)
+            foreach (var neighbor in neighbors.OrderBy(x => x.Id))
             {
                 _queue.Enqueue(neighbor);
             }
@@ -51,8 +51,8 @@ public class BFS
         if (_visited.Add(node))
         {
             var neighbors = _graph.GetAdjacentVertices(node);
-
-            foreach (var neighbor in neighbors)
+            
+            foreach (var neighbor in neighbors.OrderBy(x => x.Id))
             {
                 _queue.Enqueue(neighbor);
             }

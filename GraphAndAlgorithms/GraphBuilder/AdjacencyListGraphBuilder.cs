@@ -6,7 +6,12 @@ namespace GraphAndAlgorithms.GraphBuilder;
 public class AdjacencyListGraphBuilder
 {
     private readonly HashSet<Node> _nodes = new();
-    private readonly AdjacencyListGraph _graph = new ();
+    private readonly AdjacencyListGraph _graph ;
+
+    public AdjacencyListGraphBuilder(bool isDirected = false)
+    {
+        _graph = new AdjacencyListGraph(isDirected);
+    }
     
     public AdjacencyListGraph  Get()
     {

@@ -9,7 +9,7 @@ public class AdjacencyListGraph
     private readonly HashSet<Edge> _edges = new();
 
     public IEnumerable<Edge> Edges => _edges;
-    public IEnumerable<Node> Nodes => _edgesByNode.Keys;
+    public IEnumerable<Node> Nodes => _directed ? _edgesByNode.Keys.SelectMany(GetAdjacentVertices).ToHashSet() : _edgesByNode.Keys;
     public IEnumerable<Node> LeafNodes => _edgesByNode.Where(x=>x.Value.Count==1).Select(x=>x.Key);
     
     public AdjacencyListGraph(bool directed = false)

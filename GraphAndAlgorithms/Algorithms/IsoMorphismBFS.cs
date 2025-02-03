@@ -17,9 +17,12 @@ public class IsoMorphismBFS
 
     private bool AreSameGraphs(Node startNodeA,Node startNodeB)
     {
-        var bfsA = new BFS(_graphA).Encode(startNodeA, new StringBuilder());
-        var bfsB = new BFS(_graphB).Encode(startNodeB, new StringBuilder());
-
-        return bfsA.ToString().Equals(bfsB.ToString());
+        var bfsA = new BFS(_graphA);
+        var bfsB = new BFS(_graphB);
+        
+        bfsA.Traverse(startNodeA);
+        bfsB.Traverse(startNodeB);
+        
+        return bfsA.Result.SequenceEqual(bfsB.Result);
     }
 }
