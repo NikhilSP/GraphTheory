@@ -1,6 +1,5 @@
 using GraphAndAlgorithms.Algorithms;
 using GraphAndAlgorithms.GraphBuilder;
-using Shouldly;
 using Xunit;
 
 namespace Tests.Algorithms;
@@ -35,6 +34,6 @@ public class TarjanSccSolverAdjacencyListTests
 
         var _graph = graphBuilder.Get();
 
-        var scc = new TarjanStronglyConnectedComponents(_graph);
+        var scc = new TarjanStronglyConnectedComponentsSimplified(_graph);
     }
 }
